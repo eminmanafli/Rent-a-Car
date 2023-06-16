@@ -14,12 +14,12 @@ def masinlar():
     carWord = Label(master=masin, image=tk_carWordPhoto,text='Movcud Masinlar', font=('Helvetica', 20, 'bold'), compound='center')
     carWord.place(x=0, y=0)
 
-    cars = ['Camaro', 'Mercedes', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro']
+    cars = ['Camaro', 'Mercedes', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro','Camaro', 'Camaro', 'Camaro','Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro']
     cars_var = StringVar(value=cars)
     cars_listbox = Listbox(master=masin, listvariable=cars_var, selectmode=SINGLE, fg='black', bg='white', font=20, selectbackground='blue', selectforeground='white')
     cars_listbox.place(x=0, y=200, width=250, height=400)
-    car_scrollbar = Scrollbar(bg='gray', activebackground='black', orient='vertical', command=cars_listbox.yview)
-    car_scrollbar.place(x=250, y=200)
+    car_scrollbar = Scrollbar(master=masin, bg='gray', activebackground='black', orient='vertical', command=cars_listbox.yview)
+    car_scrollbar.place(x=250, y=200, height=400)
     cars_listbox['yscrollcommand'] = car_scrollbar.set
 
 
