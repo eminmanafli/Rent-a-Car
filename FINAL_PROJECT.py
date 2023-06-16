@@ -2,14 +2,8 @@
 from tkinter import *
 from PIL import Image, ImageTk
 
-def masinlar():
-    class Masin(BirinciPencere):
-        def __init__(self, master, width, height):
-            self.master = master
-            self.width = width
-            self.height = height
-            super().__init__(master, width, height)
 
+def masinlar():
     masin = Toplevel(root)
     masin.title('Masin penceresi')
     masin.geometry('1000x600')
@@ -20,17 +14,14 @@ def masinlar():
     carWord = Label(master=masin, image=tk_carWordPhoto,text='Movcud Masinlar', font=('Helvetica', 20, 'bold'), compound='center')
     carWord.place(x=0, y=0)
 
-    car1_photo = resize_image('57030b9026c906ec3c8c0b71.png', 200, 200)
-    car1_button = Button(master=masin, image=car1_photo)
-    car1_button.place(x=0, y=200)
+    cars = ['Camaro', 'Mercedes', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro', 'Camaro']
+    cars_var = StringVar(value=cars)
+    cars_listbox = Listbox(master=masin, listvariable=cars_var, selectmode=SINGLE, fg='black', bg='white', font=20, selectbackground='blue', selectforeground='white')
+    cars_listbox.place(x=0, y=200, width=250, height=400)
+    car_scrollbar = Scrollbar(bg='gray', activebackground='black', orient='vertical', command=cars_listbox.yview)
+    car_scrollbar.place(x=250, y=200)
+    cars_listbox['yscrollcommand'] = car_scrollbar.set
 
-    car2_photo = resize_image('f066234325ddb399d1ae5a2b.png', 200, 200)
-    car2_button = Button(master=masin, image=car2_photo)
-    car2_button.place(x=200, y=200)
-
-    car3_photo = resize_image('1000x620xc.png', 200, 200)
-    car3_button = Button(master=masin, image=car3_photo)
-    car3_button.place(x=400, y=200)
 
     masin.mainloop()
 
@@ -41,18 +32,11 @@ def resize_image(image_path, width, height):
     return ImageTk.PhotoImage(resized_image)
 
 
-class BirinciPencere:
-
-    def __init__(self, master, width, height):
-        self.master = master
-        self.width = width
-        self.height = height
-
 root = Tk()
 root.title("Rent a Car")
 root.geometry("1000x600")
 root.iconbitmap('5320259.ico')
-
+root.maxsize(width=1000, height=600)
 
 emrler_photo = resize_image('photo-1585503418537-88331351ad99.png', 1000, 200)
 emrler_photo1 = Image.open('photo-1585503418537-88331351ad99.png')
@@ -62,7 +46,7 @@ emrler = Label(master=root,image=tk_emrler_photo,
                compound='center', font=('Helvetica', 30, 'bold'), fg='orange')
 emrler.place(x=0, y=0, width=1000, height=200)
 
-masinlar_photo = resize_image('bd7fcfa27c1621914960f9e2fe538f43.png', 500, 400)
+masinlar_photo = resize_image('car1.png', 500, 400)
 masinlar_button = Button(master=root, image=masinlar_photo, command=masinlar)
 masinlar_button.place(x=0, y=200)
 masinlar_label = Label(master=root, text='Maşınlar', font=('Helvetica', 20, 'bold'), fg='white', bg='black')
