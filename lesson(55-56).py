@@ -17,7 +17,7 @@ def edit():
     root2 = Toplevel(masin)
     root2.title('Edit window')
     root2.geometry('1000x600')
-    root2.iconbitmap('bd7fcfa27c1621914960f9e2fe538f43.ico')
+    root2.iconbitmap('car2_icon.ico')
     root2.maxsize(width=1000, height=600)
     root2.minsize(width=1000, height=600)
 

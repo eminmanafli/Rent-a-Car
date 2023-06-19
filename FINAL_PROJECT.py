@@ -28,7 +28,18 @@ class Musteri:
 
 def masinlar():
     def edit():
-        pass
+        data_car = [i for i in cars_listbox.get(cars_listbox.curselection())]
+
+        index_data = cars.index(data_car)
+        cars.remove(data_car)
+        marka2 = marka_entry.get()
+        model2 = model_entry.get()
+        il2 = il_entry.get()
+        reng2 = reng_entry.get()
+        nomre2 = nomre_entry.get()
+        new_car = [marka2, model2, il2, reng2, nomre2]
+        cars.insert(index_data, new_car)
+        cars_var.set(cars)
 
     def delete():
         cars.pop(cars_listbox.curselection()[0])  # (0)
@@ -59,11 +70,11 @@ def masinlar():
     masin = Toplevel(root)
     masin.title('Masin penceresi')
     masin.geometry('1000x600')
-    masin.iconbitmap('bd7fcfa27c1621914960f9e2fe538f43.ico')
+    masin.iconbitmap('images/car2_icon.ico')
     masin.maxsize(width=1000, height=600)
     masin.minsize(width=1000, height=600)
 
-    carWordPhoto = Image.open('bannerEuropean.png')
+    carWordPhoto = Image.open('images/car_banner.png')
     tk_carWordPhoto = ImageTk.PhotoImage(carWordPhoto)
     carWord = Label(master=masin, image=tk_carWordPhoto)
     carWord.place(x=0, y=0)
@@ -159,12 +170,12 @@ def musteriler():
     musteri = Toplevel(root)
     musteri.title('Musteri penceresi')
     musteri.geometry('1000x600')
-    musteri.iconbitmap('bd7fcfa27c1621914960f9e2fe538f43.ico')
+    musteri.iconbitmap('images/car2_icon.ico')
     musteri.maxsize(width=1000, height=600)
     musteri.minsize(width=1000, height=600)
 
     musteriWordPhoto = Image.open(
-        'blog-featuredimage_diversity-and-inclusion_a-formula-for-success.png')
+        'images/musteri_banner.png')
     tk_musteriWordPhoto = ImageTk.PhotoImage(musteriWordPhoto)
     musteriWord = Label(master=musteri, image=tk_musteriWordPhoto)
     musteriWord.place(x=0, y=0)
@@ -235,25 +246,25 @@ def resize_image(image_path, width, height):
 root = Tk()
 root.title("Rent a Car")
 root.geometry("1000x600")
-root.iconbitmap('5320259.ico')
+root.iconbitmap('images/masin_icon.ico')
 root.maxsize(width=1000, height=600)
 root.minsize(width=1000, height=600)
 
-emrler_photo = resize_image('photo-1585503418537-88331351ad99.png', 1000, 200)
-emrler_photo1 = Image.open('photo-1585503418537-88331351ad99.png')
+emrler_photo = resize_image('images/pencere1_banner.png', 1000, 200)
+emrler_photo1 = Image.open('images/pencere1_banner.png')
 tk_emrler_photo = ImageTk.PhotoImage(emrler_photo1)
 emrler = Label(master=root, image=tk_emrler_photo,
                text='Movcud xidmetler:\nMüştəri idarəetmə pəncərəsi\nMaşın idarəetmə pəncərəsi\nKirayə vermə və qaytarma',
                compound='center', font=('Helvetica', 30, 'bold'), fg='orange')
 emrler.place(x=0, y=0, width=1000, height=200)
 
-masinlar_photo = resize_image('car1.png', 500, 400)
+masinlar_photo = resize_image('images/car1.png', 500, 400)
 masinlar_button = Button(master=root, image=masinlar_photo, command=masinlar)
 masinlar_button.place(x=0, y=200)
 masinlar_label = Label(master=root, text='Maşınlar', font=('Helvetica', 20, 'bold'), fg='black', bg='#e1e1d7')
 masinlar_label.place(x=200, y=230)
 
-musteri_photo = resize_image('360_F_196873357_Z8LRgbrFSLloSUP1QEqaVAi3OBbVIaWh.png', 500, 400)
+musteri_photo = resize_image('images/musteri_pencere.png', 500, 400)
 musteri_button = Button(master=root, image=musteri_photo, command=musteriler)
 musteri_button.place(x=500, y=200)
 musteri_label = Label(master=root, text='Müştərilər', font=('Helvetica', 20, 'bold'), fg='black', bg='white')
