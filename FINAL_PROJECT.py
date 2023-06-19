@@ -28,18 +28,27 @@ class Musteri:
 
 def masinlar():
     def edit():
-        data_car = [i for i in cars_listbox.get(cars_listbox.curselection())]
+        data_car = cars[cars_listbox.curselection()[0]]
+        marka_entry.delete(0, END)
+        marka_entry.insert(0, data_car.marka)
+        model_entry.delete(0, END)
+        model_entry.insert(0, data_car.model)
+        il_entry.delete(0, END)
+        il_entry.insert(0, data_car.buraxilis_ili)
+        reng_entry.delete(0, END)
+        reng_entry.insert(0, data_car.reng)
+        nomre_entry.delete(0, END)
+        nomre_entry.insert(0, data_car.nomre)
 
-        index_data = cars.index(data_car)
-        cars.remove(data_car)
-        marka2 = marka_entry.get()
-        model2 = model_entry.get()
-        il2 = il_entry.get()
-        reng2 = reng_entry.get()
-        nomre2 = nomre_entry.get()
-        new_car = [marka2, model2, il2, reng2, nomre2]
-        cars.insert(index_data, new_car)
+    def apply():
+        change_car = cars[cars_listbox.curselection()[0]]
+        change_car.marka = marka_entry.get()
+        change_car.model = model_entry.get()
+        change_car.buraxilis_ili = il_entry.get()
+        change_car.reng = reng_entry.get()
+        change_car.nomre = nomre_entry.get()
         cars_var.set(cars)
+
 
     def delete():
         cars.pop(cars_listbox.curselection()[0])  # (0)
@@ -47,10 +56,15 @@ def masinlar():
 
     def add():
         my_marka = marka_entry.get()
+        marka_entry.delete(0, END)
         my_model = model_entry.get()
+        model_entry.delete(0, END)
         my_il = il_entry.get()
+        il_entry.delete(0, END)
         my_reng = reng_entry.get()
+        reng_entry.delete(0, END)
         my_nomre = nomre_entry.get()
+        nomre_entry.delete(0, END)
         my_car = Car(my_marka, my_model, my_il, my_reng, my_nomre)
         cars.append(my_car)
         cars_var.set(cars)
@@ -125,16 +139,19 @@ def masinlar():
     nomre_entry.place(x=360, y=415)
 
     delete_button = Button(master=masin, text='Delete', bg='red', fg='white', font=20, width=10, command=delete)
-    delete_button.place(x=400, y=500)
+    delete_button.place(x=400, y=455)
 
     edit_button = Button(master=masin, text='Edit', bg='cyan', fg='black', font=20, width=10, command=edit)
     edit_button.place(x=270, y=500)
 
-    save_button = Button(master=masin, text='Save', bg='orange', fg='black', font=20, width=10, command=save1)
-    save_button.place(x=270, y=455)
+    save_button = Button(master=masin, text='Save', bg='orange', fg='black', font=20, width=20, command=save1)
+    save_button.place(x=270, y=550)
 
     add_button = Button(master=masin, text='Add', bg='green', fg='black', font=20, width=10, command=add)
-    add_button.place(x=400, y=455)
+    add_button.place(x=270, y=455)
+
+    apply_button = Button(master=masin, text='Apply', bg='purple', fg='white', font=20, width=10, command=apply)
+    apply_button.place(x=400, y=500)
 
     masin.mainloop()
 
@@ -148,9 +165,13 @@ def musteriler():
 
     def add():
         my_ad = ad_entry.get()
+        ad_entry.delete(0, END)
         my_soyad = soyad_entry.get()
+        soyad_entry.delete(0, END)
         my_unvan = unvan_entry.get()
+        unvan_entry.delete(0, END)
         my_telefon = telefon_nomresi_entry.get()
+        telefon_nomresi_entry.delete(0, END)
         my_musteri = Musteri(my_ad, my_soyad, my_unvan, my_telefon)
         musteriler.append(my_musteri)
         musteriler_var.set(musteriler)
@@ -268,6 +289,6 @@ musteri_photo = resize_image('images/musteri_pencere.png', 500, 400)
 musteri_button = Button(master=root, image=musteri_photo, command=musteriler)
 musteri_button.place(x=500, y=200)
 musteri_label = Label(master=root, text='Müştərilər', font=('Helvetica', 20, 'bold'), fg='black', bg='white')
-musteri_label.place(x=650, y=230)
+musteri_label.place(x=680, y=230)
 
 root.mainloop()
