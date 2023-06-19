@@ -15,6 +15,7 @@ class Car:
     def __str__(self):
         return f'{self.marka} {self.model}'
 
+
 class Musteri:
     def __init__(self, ad, soyad, unvan, telefon_nomresi):
         self.ad = ad
@@ -27,6 +28,11 @@ class Musteri:
 
 
 def masinlar():
+    def find():
+        if axtaris_listbox.curselection()[0] == 'Marka':
+            cars.filter(marka=axtaris_entry.get())
+            cars_var.set(cars)
+
     def edit():
         data_car = cars[cars_listbox.curselection()[0]]
         marka_entry.delete(0, END)
@@ -48,7 +54,6 @@ def masinlar():
         change_car.reng = reng_entry.get()
         change_car.nomre = nomre_entry.get()
         cars_var.set(cars)
-
 
     def delete():
         cars.pop(cars_listbox.curselection()[0])  # (0)
@@ -153,11 +158,51 @@ def masinlar():
     apply_button = Button(master=masin, text='Apply', bg='purple', fg='white', font=20, width=10, command=apply)
     apply_button.place(x=400, y=500)
 
+    marka_filtr = 'Marka'
+    model_filtr = 'Model'
+    il_filtr = 'Il'
+    reng_filtr = 'Reng'
+    nomre_filtr = 'Nomre'
+    axtaris_filtr = [marka_filtr, model_filtr, il_filtr, reng_filtr, nomre_filtr]
+    axtaris_filtr_var = Variable(value=axtaris_filtr)
+
+    axtaris_listbox = Listbox(master=masin, listvariable=axtaris_filtr_var, selectmode=SINGLE, fg='black', bg='white', font=20, selectbackground='blue', selectforeground='white')
+    axtaris_listbox.place(x=590, y=250, width=100, height=125)
+
+    axtaris_label = Label(master=masin, text='Axtaris filtrleri:', font=('Helvetica', 20), fg='black')
+    axtaris_label.place(x=585, y=202)
+
+    axtaris_entry = Entry(master=masin, width=15, font=20)
+    axtaris_entry.place(x=790, y=250)
+
+    axtaris_button = Button(master=masin ,text='Axtar', bg='pink', fg='black', font=20, width=10, command=find)
+    axtaris_button.place(x=790, y=300)
+
+    reset_button = Button(master=masin, text='Reset', bg='lime', fg='black', font=20, width=10)
+    reset_button.place(x=790, y=350)
+
     masin.mainloop()
+
 
 def musteriler():
     def edit():
-        pass
+        data_car = musteriler[musteriler_listbox.curselection()[0]]
+        ad_entry.delete(0, END)
+        ad_entry.insert(0, data_car.ad)
+        soyad_entry.delete(0, END)
+        soyad_entry.insert(0, data_car.soyad)
+        unvan_entry.delete(0, END)
+        unvan_entry.insert(0, data_car.unvan)
+        telefon_nomresi_entry.delete(0, END)
+        telefon_nomresi_entry.insert(0, data_car.telefon_nomresi)
+
+    def apply():
+        change_person = musteriler[musteriler_listbox.curselection()[0]]
+        change_person.ad = ad_entry.get()
+        change_person.model = soyad_entry.get()
+        change_person.unvan = unvan_entry.get()
+        change_person.telefon_nomresi = telefon_nomresi_entry.get()
+        musteriler_var.set(musteriler)
 
     def delete():
         musteriler.pop(musteriler_listbox.curselection()[0])  # (0)
@@ -244,16 +289,19 @@ def musteriler():
     telefon_nomresi_entry.place(x=370, y=365)
 
     delete_button = Button(master=musteri, text='Delete', bg='red', fg='white', font=20, width=10, command=delete)
-    delete_button.place(x=400, y=500)
+    delete_button.place(x=400, y=455)
 
     edit_button = Button(master=musteri, text='Edit', bg='cyan', fg='black', font=20, width=10, command=edit)
     edit_button.place(x=270, y=500)
 
-    save_button = Button(master=musteri, text='Save', bg='orange', fg='black', font=20, width=10, command=save1)
-    save_button.place(x=270, y=455)
+    save_button = Button(master=musteri, text='Save', bg='orange', fg='black', font=20, width=20, command=save1)
+    save_button.place(x=270, y=550)
 
     add_button = Button(master=musteri, text='Add', bg='green', fg='black', font=20, width=10, command=add)
-    add_button.place(x=400, y=455)
+    add_button.place(x=270, y=455)
+
+    apply_button = Button(master=musteri, text='Apply', bg='purple', fg='white', font=20, width=10, command=apply)
+    apply_button.place(x=400, y=500)
 
     musteri.mainloop()
 
