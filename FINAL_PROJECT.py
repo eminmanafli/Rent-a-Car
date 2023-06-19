@@ -29,9 +29,9 @@ class Musteri:
 
 def masinlar():
     def find():
-        if axtaris_listbox.curselection()[0] == 'Marka':
-            cars.filter(marka=axtaris_entry.get())
-            cars_var.set(cars)
+        nonlocal cars
+        found_cars = list(filter(lambda car: find_cars(car, axtaris_entry), cars))
+        cars_var.set(found_cars)
 
     def edit():
         data_car = cars[cars_listbox.curselection()[0]]
@@ -310,6 +310,10 @@ def resize_image(image_path, width, height):
     original_image = Image.open(image_path)
     resized_image = original_image.resize((width, height), Image.LANCZOS)
     return ImageTk.PhotoImage(resized_image)
+
+def find_cars(car, entry):
+    if entry.get() in car.marka:
+        return car
 
 
 root = Tk()
