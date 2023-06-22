@@ -347,6 +347,9 @@ def musteriler():
 
 
 def kiraye():
+    def musteri_show_info(event):
+        print("Check")
+
     kiraye_window = Toplevel(root)
     kiraye_window.title('Kiraye alib_verme')
     kiraye_window.geometry('1000x600')
@@ -379,6 +382,7 @@ def kiraye():
     musteri_secim['yscrollcommand'] = musteri_secim_scrollbar.set
     musteri_secim_label = Label(master=kiraye_window, text='Musteri secin:', font=('Helvetica', 20, 'bold'), fg='black')
     musteri_secim_label.place(x=0, y=205)
+    musteri_secim.bind("<<ListboxSelect>>", musteri_show_info)
 
     masinlar2 = []
     try:
