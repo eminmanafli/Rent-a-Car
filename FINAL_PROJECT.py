@@ -377,7 +377,72 @@ def kiraye():
                               activebackground='black', orient='vertical', command=musteri_secim.yview)
     musteri_secim_scrollbar.place(x=200, y=250)
     musteri_secim['yscrollcommand'] = musteri_secim_scrollbar.set
+    musteri_secim_label = Label(master=kiraye_window, text='Musteri secin:', font=('Helvetica', 20, 'bold'), fg='black')
+    musteri_secim_label.place(x=0, y=205)
 
+    masinlar2 = []
+    try:
+        file = open('CarFile.txt', 'rb')
+        try:
+            masinlar2 = pickle.load(file)
+        except Exception as e:
+            print(e)
+        finally:
+            file.close()
+    except Exception as ex:
+        print(ex)
+    masinlar2_var = Variable(value=masinlar2)
+    masin_secim = Listbox(master=kiraye_window, listvariable=masinlar2_var, selectmode=SINGLE, fg='black',
+                            bg='white',
+                            font=20, selectbackground='blue', selectforeground='white')
+    masin_secim.place(x=300, y=250, width=200, height=150)
+    masin_secim_scrollbar = Scrollbar(master=kiraye_window, highlightbackground='gray', highlightcolor='black',
+                                        bg='gray',
+                                        activebackground='black', orient='vertical', command=masin_secim.yview)
+    masin_secim_scrollbar.place(x=500, y=250)
+    masin_secim['yscrollcommand'] = masin_secim_scrollbar.set
+    masin_secim_label = Label(master=kiraye_window, text='Masin secin:', font=('Helvetica', 20, 'bold'), fg='black')
+    masin_secim_label.place(x=300, y=205)
+
+    muddet_list = ['1 gun', '10 gun', '1 hefte', '2 hefte', '1 ay']
+    muddet_var = Variable(value=muddet_list)
+    muddet_secim = Listbox(master=kiraye_window, listvariable=muddet_var, selectmode=SINGLE, fg='black', bg='white',
+                              font=20, selectbackground='blue', selectforeground='white')
+    muddet_secim.place(x=600, y=250, width=200, height=150)
+    muddet_secim_scrollbar = Scrollbar(master=kiraye_window, highlightbackground='gray', highlightcolor='black',
+                                        bg='gray',
+                                        activebackground='black', orient='vertical', command=muddet_secim.yview)
+    muddet_secim_scrollbar.place(x=800, y=250)
+    muddet_secim['yscrollcommand'] = muddet_secim_scrollbar.set
+    muddet_secim_label = Label(master=kiraye_window, text='Muddet secin:', font=('Helvetica', 20, 'bold'), fg='black')
+    muddet_secim_label.place(x=600, y=205)
+
+    ad_label = Label(master=kiraye_window, text='Ad:', font=('Helvetica', 20), fg='black')
+    ad_label.place(x=0, y=400)
+
+    soyad_label = Label(master=kiraye_window, text='Soyad:', font=('Helvetica', 20), fg='black')
+    soyad_label.place(x=0, y=450)
+
+    unvan_label = Label(master=kiraye_window, text='Unvan:', font=('Helvetica', 20), fg='black')
+    unvan_label.place(x=0, y=500)
+
+    telefon_label = Label(master=kiraye_window, text='Telefon:', font=('Helvetica', 20), fg='black')
+    telefon_label.place(x=0, y=550)
+
+    marka_label = Label(master=kiraye_window, text='Marka:', font=('Helvetica', 20), fg='black')
+    marka_label.place(x=300, y=400)
+
+    model_label = Label(master=kiraye_window, text='Model:', font=('Helvetica', 20), fg='black')
+    model_label.place(x=300, y=435)
+
+    il_label = Label(master=kiraye_window, text='Il:', font=('Helvetica', 20), fg='black')
+    il_label.place(x=300, y=470)
+
+    reng_label = Label(master=kiraye_window, text='Reng:', font=('Helvetica', 20), fg='black')
+    reng_label.place(x=300, y=505)
+
+    nomre_label = Label(master=kiraye_window, text='Nomre:', font=('Helvetica', 20), fg='black')
+    nomre_label.place(x=300, y=540)
 
     kiraye_window.mainloop()
 
@@ -419,7 +484,6 @@ def find_musteriler(musteri, entry, selection):
     elif selection == 'Telefon':
         if entry.get() in musteri.telefon_nomresi:
             return musteri
-
 
 
 root = Tk()
