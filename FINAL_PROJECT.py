@@ -5,12 +5,12 @@ import pickle
 
 
 class Car:
-    def __init__(self, marka, model, buraxilis_ili, reng, nomre):
+    def __init__(self, marka, model, buraxilis_ili, reng, qiymet):
         self.marka = marka
         self.model = model
         self.buraxilis_ili = buraxilis_ili
         self.reng = reng
-        self.nomre = nomre
+        self.qiymet = qiymet
         self.rented = False
         self.renter = None
 
@@ -50,8 +50,8 @@ def masinlar():
         il_entry.insert(0, data_car.buraxilis_ili)
         reng_entry.delete(0, END)
         reng_entry.insert(0, data_car.reng)
-        nomre_entry.delete(0, END)
-        nomre_entry.insert(0, data_car.nomre)
+        qiymet_entry.delete(0, END)
+        qiymet_entry.insert(0, data_car.qiymet)
 
     def apply():
         change_car = cars[cars_listbox.curselection()[0]]
@@ -63,8 +63,8 @@ def masinlar():
         il_entry.delete(0, END)
         change_car.reng = reng_entry.get()
         reng_entry.delete(0, END)
-        change_car.nomre = nomre_entry.get()
-        nomre_entry.delete(0, END)
+        change_car.qiymet = qiymet_entry.get()
+        qiymet_entry.delete(0, END)
         cars_var.set(cars)
 
     def delete():
@@ -80,9 +80,9 @@ def masinlar():
         il_entry.delete(0, END)
         my_reng = reng_entry.get()
         reng_entry.delete(0, END)
-        my_nomre = nomre_entry.get()
-        nomre_entry.delete(0, END)
-        my_car = Car(my_marka, my_model, my_il, my_reng, my_nomre)
+        my_qiymet = qiymet_entry.get()
+        qiymet_entry.delete(0, END)
+        my_car = Car(my_marka, my_model, my_il, my_reng, my_qiymet)
         cars.append(my_car)
         cars_var.set(cars)
 
@@ -110,7 +110,7 @@ def masinlar():
     carWord = Label(master=masin, image=tk_carWordPhoto)
     carWord.place(x=0, y=0)
 
-    car1 = Car('Chevrolet', 'Camaro', 2021, 'qara', '99SU236')
+    car1 = Car('Chevrolet', 'Camaro', 2021, 'qara', 200)
     cars = [car1]
     try:
         file = open('CarFile.txt', 'rb')
@@ -150,10 +150,10 @@ def masinlar():
     reng_entry = Entry(master=masin, width=15, font=20)
     reng_entry.place(x=360, y=365)
 
-    nomre_label = Label(master=masin, text='Nomre:', font=('Helvetica', 20), fg='black')
-    nomre_label.place(x=270, y=405)
-    nomre_entry = Entry(master=masin, width=15, font=20)
-    nomre_entry.place(x=360, y=415)
+    qiymet_label = Label(master=masin, text='Qiymet:', font=('Helvetica', 20), fg='black')
+    qiymet_label.place(x=270, y=405)
+    qiymet_entry = Entry(master=masin, width=15, font=20)
+    qiymet_entry.place(x=360, y=415)
 
     delete_button = Button(master=masin, text='Delete', bg='red', fg='white', font=20, width=10, command=delete)
     delete_button.place(x=400, y=455)
@@ -170,7 +170,7 @@ def masinlar():
     apply_button = Button(master=masin, text='Apply', bg='purple', fg='white', font=20, width=10, command=apply)
     apply_button.place(x=400, y=500)
 
-    axtaris_filtr = ['Marka', 'Model', 'Il', 'Reng', 'Nomre']
+    axtaris_filtr = ['Marka', 'Model', 'Il', 'Reng', 'Qiymet']
     axtaris_filtr_var = Variable(value=axtaris_filtr)
 
     axtaris_listbox = Listbox(master=masin, listvariable=axtaris_filtr_var, selectmode=SINGLE, fg='black', bg='white', font=20, selectbackground='blue', selectforeground='white')
@@ -347,8 +347,26 @@ def musteriler():
 
 
 def kiraye():
+    def qiymet(event):
+        price = masinlar2[masin_secim.curselection()[0]].qiymet
+        muddet = muddet_list[muddet_secim.curselection()[0]]
+        if muddet == '1 gun':
+            qiymet_label4['text'] = price * 1
+
     def musteri_show_info(event):
-        print("Check")
+        info_person = musteriler2[musteri_secim.curselection()[0]]
+        ad_label2['text'] = info_person.ad
+        soyad_label2['text'] = info_person.soyad
+        unvan_label2['text'] = info_person.unvan
+        telefon_label2['text'] = info_person.telefon_nomresi
+
+    def masin_show_info(event):
+        info_car = masinlar2[masin_secim.curselection()[0]]
+        marka_label2['text'] = info_car.marka
+        model_label2['text'] = info_car.model
+        il_label2['text'] = info_car.buraxilis_ili
+        reng_label2['text'] = info_car.reng
+        qiymet_label2['text'] = info_car.nomre
 
     kiraye_window = Toplevel(root)
     kiraye_window.title('Kiraye alib_verme')
@@ -407,6 +425,7 @@ def kiraye():
     masin_secim['yscrollcommand'] = masin_secim_scrollbar.set
     masin_secim_label = Label(master=kiraye_window, text='Masin secin:', font=('Helvetica', 20, 'bold'), fg='black')
     masin_secim_label.place(x=300, y=205)
+    masin_secim.bind("<<ListboxSelect>>", masin_show_info)
 
     muddet_list = ['1 gun', '10 gun', '1 hefte', '2 hefte', '1 ay']
     muddet_var = Variable(value=muddet_list)
@@ -420,33 +439,57 @@ def kiraye():
     muddet_secim['yscrollcommand'] = muddet_secim_scrollbar.set
     muddet_secim_label = Label(master=kiraye_window, text='Muddet secin:', font=('Helvetica', 20, 'bold'), fg='black')
     muddet_secim_label.place(x=600, y=205)
+    muddet_secim.bind("<<ListboxSelect>>", qiymet)
 
-    ad_label = Label(master=kiraye_window, text='Ad:', font=('Helvetica', 20), fg='black')
+    ad_label = Label(master=kiraye_window, text='Ad:', font=('Helvetica', 20), fg='green')
     ad_label.place(x=0, y=400)
+    ad_label2 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='black')
+    ad_label2.place(x=100, y=400)
 
-    soyad_label = Label(master=kiraye_window, text='Soyad:', font=('Helvetica', 20), fg='black')
+    soyad_label = Label(master=kiraye_window, text='Soyad:', font=('Helvetica', 20), fg='green')
     soyad_label.place(x=0, y=450)
+    soyad_label2 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='black')
+    soyad_label2.place(x=100, y=450)
 
-    unvan_label = Label(master=kiraye_window, text='Unvan:', font=('Helvetica', 20), fg='black')
+    unvan_label = Label(master=kiraye_window, text='Unvan:', font=('Helvetica', 20), fg='green')
     unvan_label.place(x=0, y=500)
+    unvan_label2 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='black')
+    unvan_label2.place(x=100, y=500)
 
-    telefon_label = Label(master=kiraye_window, text='Telefon:', font=('Helvetica', 20), fg='black')
+    telefon_label = Label(master=kiraye_window, text='Telefon:', font=('Helvetica', 20), fg='green')
     telefon_label.place(x=0, y=550)
+    telefon_label2 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='black')
+    telefon_label2.place(x=100, y=550)
 
-    marka_label = Label(master=kiraye_window, text='Marka:', font=('Helvetica', 20), fg='black')
+    marka_label = Label(master=kiraye_window, text='Marka:', font=('Helvetica', 20), fg='green')
     marka_label.place(x=300, y=400)
+    marka_label2 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='black')
+    marka_label2.place(x=400, y=400)
 
-    model_label = Label(master=kiraye_window, text='Model:', font=('Helvetica', 20), fg='black')
+    model_label = Label(master=kiraye_window, text='Model:', font=('Helvetica', 20), fg='green')
     model_label.place(x=300, y=435)
+    model_label2 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='black')
+    model_label2.place(x=400, y=435)
 
-    il_label = Label(master=kiraye_window, text='Il:', font=('Helvetica', 20), fg='black')
+    il_label = Label(master=kiraye_window, text='Il:', font=('Helvetica', 20), fg='green')
     il_label.place(x=300, y=470)
+    il_label2 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='black')
+    il_label2.place(x=400, y=470)
 
-    reng_label = Label(master=kiraye_window, text='Reng:', font=('Helvetica', 20), fg='black')
+    reng_label = Label(master=kiraye_window, text='Reng:', font=('Helvetica', 20), fg='green')
     reng_label.place(x=300, y=505)
+    reng_label2 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='black')
+    reng_label2.place(x=400, y=505)
 
-    nomre_label = Label(master=kiraye_window, text='Nomre:', font=('Helvetica', 20), fg='black')
-    nomre_label.place(x=300, y=540)
+    qiymet_label = Label(master=kiraye_window, text='Qiymet:', font=('Helvetica', 20), fg='green')
+    qiymet_label.place(x=300, y=540)
+    qiymet_label2 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='black')
+    qiymet_label2.place(x=400, y=540)
+
+    qiymet_label3 = Label(master=kiraye_window, text='Umumi qiymet:', font=('Helvetica', 20, 'bold'), fg='dark red')
+    qiymet_label3.place(x=600, y=400)
+    qiymet_label4 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='blue')
+    qiymet_label4.place(x=780, y=400)
 
     kiraye_window.mainloop()
 
@@ -470,8 +513,8 @@ def find_cars(car, entry, selection):
     elif selection == 'Reng':
         if entry.get() in car.reng:
             return car
-    elif selection == 'Nomre':
-        if entry.get() in car.nomre:
+    elif selection == 'Qiymet':
+        if entry.get() in car.qiymet:
             return car
 
 
