@@ -110,7 +110,7 @@ def masinlar():
     carWord = Label(master=masin, image=tk_carWordPhoto)
     carWord.place(x=0, y=0)
 
-    car1 = Car('Chevrolet', 'Camaro', 2021, 'qara', 200)
+    car1 = Car('Chevrolet', 'Camaro', 2021, 'qara', '160')
     cars = [car1]
     try:
         file = open('CarFile.txt', 'rb')
@@ -356,7 +356,15 @@ def kiraye():
             price = current_car.qiymet
             muddet = muddet_list[selection[0]]
             if muddet == '1 gun':
-                qiymet_label4['text'] = price * 1
+                qiymet_label4['text'] = str(int(price) * 1)
+            elif muddet == '10 gun':
+                qiymet_label4['text'] = str(int(price) * 10)
+            elif muddet == '1 hefte':
+                qiymet_label4['text'] = str(int(price) * 7)
+            elif muddet == '2 hefte':
+                qiymet_label4['text'] = str(int(price) * 14)
+            elif muddet == '1 ay':
+                qiymet_label4['text'] =str(int(price) * 30)
 
     def musteri_show_info(event):
         nonlocal current_person
@@ -379,7 +387,7 @@ def kiraye():
             model_label2['text'] = info_car.model
             il_label2['text'] = info_car.buraxilis_ili
             reng_label2['text'] = info_car.reng
-            qiymet_label2['text'] = info_car.nomre
+            qiymet_label2['text'] = info_car.qiymet
 
     kiraye_window = Toplevel(root)
     kiraye_window.title('Kiraye alib_verme')
@@ -502,7 +510,7 @@ def kiraye():
     qiymet_label3 = Label(master=kiraye_window, text='Umumi qiymet:', font=('Helvetica', 20, 'bold'), fg='dark red')
     qiymet_label3.place(x=600, y=400)
     qiymet_label4 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='blue')
-    qiymet_label4.place(x=780, y=400)
+    qiymet_label4.place(x=810, y=400)
 
     kiraye_window.mainloop()
 
