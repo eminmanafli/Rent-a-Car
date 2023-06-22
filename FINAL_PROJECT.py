@@ -347,21 +347,28 @@ def musteriler():
 
 
 def kiraye():
+    current_person = None
+    current_car = None
     def qiymet(event):
+        nonlocal current_car
         price = current_car.qiymet
         muddet = muddet_list[muddet_secim.curselection()[0]]
         if muddet == '1 gun':
             qiymet_label4['text'] = price * 1
 
     def musteri_show_info(event):
-        info_person = current_person
+        nonlocal current_person
+        info_person = musteriler2[musteri_secim.curselection()[0]]
+        current_person = info_person
         ad_label2['text'] = info_person.ad
         soyad_label2['text'] = info_person.soyad
         unvan_label2['text'] = info_person.unvan
         telefon_label2['text'] = info_person.telefon_nomresi
 
     def masin_show_info(event):
-        info_car = current_car
+        nonlocal current_car
+        info_car = masinlar2[masin_secim.curselection()[0]]
+        current_car = info_car
         marka_label2['text'] = info_car.marka
         model_label2['text'] = info_car.model
         il_label2['text'] = info_car.buraxilis_ili
@@ -440,9 +447,6 @@ def kiraye():
     muddet_secim_label = Label(master=kiraye_window, text='Muddet secin:', font=('Helvetica', 20, 'bold'), fg='black')
     muddet_secim_label.place(x=600, y=205)
     muddet_secim.bind("<<ListboxSelect>>", qiymet)
-
-    current_person = musteriler2[musteri_secim.curselection()[0]]
-    current_car = masinlar2[masin_secim.curselection()[0]]
 
     ad_label = Label(master=kiraye_window, text='Ad:', font=('Helvetica', 20), fg='green')
     ad_label.place(x=0, y=400)
