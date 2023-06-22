@@ -351,29 +351,35 @@ def kiraye():
     current_car = None
     def qiymet(event):
         nonlocal current_car
-        price = current_car.qiymet
-        muddet = muddet_list[muddet_secim.curselection()[0]]
-        if muddet == '1 gun':
-            qiymet_label4['text'] = price * 1
+        selection = muddet_secim.curselection()
+        if selection:
+            price = current_car.qiymet
+            muddet = muddet_list[selection[0]]
+            if muddet == '1 gun':
+                qiymet_label4['text'] = price * 1
 
     def musteri_show_info(event):
         nonlocal current_person
-        info_person = musteriler2[musteri_secim.curselection()[0]]
-        current_person = info_person
-        ad_label2['text'] = info_person.ad
-        soyad_label2['text'] = info_person.soyad
-        unvan_label2['text'] = info_person.unvan
-        telefon_label2['text'] = info_person.telefon_nomresi
+        selection = musteri_secim.curselection()
+        if selection:
+            info_person = musteriler2[selection[0]]
+            current_person = info_person
+            ad_label2['text'] = info_person.ad
+            soyad_label2['text'] = info_person.soyad
+            unvan_label2['text'] = info_person.unvan
+            telefon_label2['text'] = info_person.telefon_nomresi
 
     def masin_show_info(event):
         nonlocal current_car
-        info_car = masinlar2[masin_secim.curselection()[0]]
-        current_car = info_car
-        marka_label2['text'] = info_car.marka
-        model_label2['text'] = info_car.model
-        il_label2['text'] = info_car.buraxilis_ili
-        reng_label2['text'] = info_car.reng
-        qiymet_label2['text'] = info_car.nomre
+        selection = masin_secim.curselection()
+        if selection:
+            info_car = masinlar2[selection[0]]
+            current_car = info_car
+            marka_label2['text'] = info_car.marka
+            model_label2['text'] = info_car.model
+            il_label2['text'] = info_car.buraxilis_ili
+            reng_label2['text'] = info_car.reng
+            qiymet_label2['text'] = info_car.nomre
 
     kiraye_window = Toplevel(root)
     kiraye_window.title('Kiraye alib_verme')
