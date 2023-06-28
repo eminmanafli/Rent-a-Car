@@ -30,13 +30,13 @@ class Musteri:
 
 
 def masinlar():
+    global cars
+
     def find():
-        nonlocal cars
         found_cars = list(filter(lambda car: find_cars(car, axtaris_entry, axtaris_filtr[axtaris_listbox.curselection()[0]]), cars))
         cars_var.set(found_cars)
 
     def reset():
-        nonlocal cars
         cars_var.set(cars)
         axtaris_entry.delete(0, END)
 
@@ -88,13 +88,13 @@ def masinlar():
 
     def save1():
         try:
-            file = open('CarFile.txt', 'wb')
+            file1 = open('CarFile.txt', 'wb')
             try:
-                pickle.dump(cars, file)
+                pickle.dump(cars, file1)
             except Exception as e:
                 print(e)
             finally:
-                file.close()
+                file1.close()
         except Exception as ex:
             print(ex)
 
@@ -110,18 +110,6 @@ def masinlar():
     carWord = Label(master=masin, image=tk_carWordPhoto)
     carWord.place(x=0, y=0)
 
-    car1 = Car('Chevrolet', 'Camaro', 2021, 'qara', '160')
-    cars = [car1]
-    try:
-        file = open('CarFile.txt', 'rb')
-        try:
-            cars = pickle.load(file)
-        except Exception as e:
-            print(e)
-        finally:
-            file.close()
-    except Exception as ex:
-        print(ex)
     cars_var = Variable(value=cars)
 
     cars_listbox = Listbox(master=masin, listvariable=cars_var, selectmode=SINGLE, fg='black', bg='white', font=20, selectbackground='blue', selectforeground='white')
@@ -191,14 +179,14 @@ def masinlar():
     masin.mainloop()
 
 
-def musteriler():
+def musteriler_func():
+    global musteriler
+
     def find():
-        nonlocal musteriler
         found_people = list(filter(lambda musteri: find_musteriler(musteri, axtaris_entry, axtaris_filtr[axtaris_listbox.curselection()[0]]), musteriler))
         musteriler_var.set(found_people)
 
     def reset():
-        nonlocal musteriler
         musteriler_var.set(musteriler)
         axtaris_entry.delete(0, END)
 
@@ -244,20 +232,20 @@ def musteriler():
 
     def save1():
         try:
-            file = open('MusteriFile.txt', 'wb')
+            file2 = open('MusteriFile.txt', 'wb')
             try:
-                pickle.dump(musteriler, file)
+                pickle.dump(musteriler, file2)
             except Exception as e:
                 print(e)
             finally:
-                file.close()
+                file2.close()
         except Exception as ex:
             print(ex)
 
     musteri = Toplevel(root)
     musteri.title('Musteri penceresi')
     musteri.geometry('1000x600')
-    musteri.iconbitmap('images/car2_icon.ico')
+    musteri.iconbitmap('images/person_icon.ico')
     musteri.maxsize(width=1000, height=600)
     musteri.minsize(width=1000, height=600)
 
@@ -267,18 +255,6 @@ def musteriler():
     musteriWord = Label(master=musteri, image=tk_musteriWordPhoto)
     musteriWord.place(x=0, y=0)
 
-    musteri1 = Musteri('Peter', 'Parker', 'USA', '1234567890')
-    musteriler = [musteri1]
-    try:
-        file = open('MusteriFile.txt', 'rb')
-        try:
-            musteriler = pickle.load(file)
-        except Exception as e:
-            print(e)
-        finally:
-            file.close()
-    except Exception as ex:
-        print(ex)
     musteriler_var = Variable(value=musteriler)
 
     musteriler_listbox = Listbox(master=musteri, listvariable=musteriler_var, selectmode=SINGLE, fg='black', bg='white', font=20,
@@ -347,8 +323,38 @@ def musteriler():
 
 
 def kiraye():
+    global renter_list
+    global musteriler
+    global cars
     current_person = None
     current_car = None
+
+    def rent(car, person):
+        global history
+        if not car.rented:
+            car.rented = True
+            car.renter = person.ad
+            renter_list.append(car.renter)
+            rent_label['text'] = 'Successfully\nrented'
+            rent_label.config(fg='green')
+            history += 1
+        else:
+            rent_label['text'] = 'Car has\nalready\nrented'
+            rent_label.config(fg='red')
+
+    def save():
+        global renter_list
+        try:
+            file3 = open('RentFile.txt', 'wb')
+            try:
+                renter_list = pickle.dump(renter_list, file3)
+            except Exception as e:
+                print(e)
+            finally:
+                file3.close()
+        except Exception as ex:
+            print(ex)
+
     def qiymet(event):
         nonlocal current_car
         selection = muddet_secim.curselection()
@@ -370,24 +376,24 @@ def kiraye():
         nonlocal current_person
         selection = musteri_secim.curselection()
         if selection:
-            info_person = musteriler2[selection[0]]
+            info_person = musteriler[selection[0]]
             current_person = info_person
-            ad_label2['text'] = info_person.ad
-            soyad_label2['text'] = info_person.soyad
-            unvan_label2['text'] = info_person.unvan
-            telefon_label2['text'] = info_person.telefon_nomresi
+            ad_label2['text'] = current_person.ad
+            soyad_label2['text'] = current_person.soyad
+            unvan_label2['text'] = current_person.unvan
+            telefon_label2['text'] = current_person.telefon_nomresi
 
     def masin_show_info(event):
         nonlocal current_car
         selection = masin_secim.curselection()
         if selection:
-            info_car = masinlar2[selection[0]]
+            info_car = cars[selection[0]]
             current_car = info_car
-            marka_label2['text'] = info_car.marka
-            model_label2['text'] = info_car.model
-            il_label2['text'] = info_car.buraxilis_ili
-            reng_label2['text'] = info_car.reng
-            qiymet_label2['text'] = info_car.qiymet
+            marka_label2['text'] = current_car.marka
+            model_label2['text'] = current_car.model
+            il_label2['text'] = current_car.buraxilis_ili
+            reng_label2['text'] = current_car.reng
+            qiymet_label2['text'] = current_car.qiymet
 
     kiraye_window = Toplevel(root)
     kiraye_window.title('Kiraye alib_verme')
@@ -400,41 +406,19 @@ def kiraye():
     kiraye_label = Label(master=kiraye_window, image=kiraye_image)
     kiraye_label.place(x=0, y=0)
 
-    musteriler2 = []
-    try:
-        file = open('MusteriFile.txt', 'rb')
-        try:
-            musteriler2 = pickle.load(file)
-        except Exception as e:
-            print(e)
-        finally:
-            file.close()
-    except Exception as ex:
-        print(ex)
-    musteriler2_var = Variable(value=musteriler2)
+    musteriler2_var = Variable(value=musteriler)
     musteri_secim = Listbox(master=kiraye_window, listvariable=musteriler2_var, selectmode=SINGLE, fg='black', bg='white',
                               font=20, selectbackground='blue', selectforeground='white')
     musteri_secim.place(x=0, y=250, width=200, height=150)
     musteri_secim_scrollbar = Scrollbar(master=kiraye_window, highlightbackground='gray', highlightcolor='black', bg='gray',
                               activebackground='black', orient='vertical', command=musteri_secim.yview)
-    musteri_secim_scrollbar.place(x=200, y=250)
+    musteri_secim_scrollbar.place(x=200, y=250, height=150)
     musteri_secim['yscrollcommand'] = musteri_secim_scrollbar.set
     musteri_secim_label = Label(master=kiraye_window, text='Musteri secin:', font=('Helvetica', 20, 'bold'), fg='black')
     musteri_secim_label.place(x=0, y=205)
     musteri_secim.bind("<<ListboxSelect>>", musteri_show_info)
 
-    masinlar2 = []
-    try:
-        file = open('CarFile.txt', 'rb')
-        try:
-            masinlar2 = pickle.load(file)
-        except Exception as e:
-            print(e)
-        finally:
-            file.close()
-    except Exception as ex:
-        print(ex)
-    masinlar2_var = Variable(value=masinlar2)
+    masinlar2_var = Variable(value=cars)
     masin_secim = Listbox(master=kiraye_window, listvariable=masinlar2_var, selectmode=SINGLE, fg='black',
                             bg='white',
                             font=20, selectbackground='blue', selectforeground='white')
@@ -442,7 +426,7 @@ def kiraye():
     masin_secim_scrollbar = Scrollbar(master=kiraye_window, highlightbackground='gray', highlightcolor='black',
                                         bg='gray',
                                         activebackground='black', orient='vertical', command=masin_secim.yview)
-    masin_secim_scrollbar.place(x=500, y=250)
+    masin_secim_scrollbar.place(x=500, y=250, height=150)
     masin_secim['yscrollcommand'] = masin_secim_scrollbar.set
     masin_secim_label = Label(master=kiraye_window, text='Masin secin:', font=('Helvetica', 20, 'bold'), fg='black')
     masin_secim_label.place(x=300, y=205)
@@ -456,7 +440,7 @@ def kiraye():
     muddet_secim_scrollbar = Scrollbar(master=kiraye_window, highlightbackground='gray', highlightcolor='black',
                                         bg='gray',
                                         activebackground='black', orient='vertical', command=muddet_secim.yview)
-    muddet_secim_scrollbar.place(x=800, y=250)
+    muddet_secim_scrollbar.place(x=800, y=250, height=150)
     muddet_secim['yscrollcommand'] = muddet_secim_scrollbar.set
     muddet_secim_label = Label(master=kiraye_window, text='Muddet secin:', font=('Helvetica', 20, 'bold'), fg='black')
     muddet_secim_label.place(x=600, y=205)
@@ -512,7 +496,77 @@ def kiraye():
     qiymet_label4 = Label(master=kiraye_window, text='', font=('Helvetica', 20), fg='blue')
     qiymet_label4.place(x=810, y=400)
 
+    rent_button = Button(master=kiraye_window, text='Rent', font=20, bg='tan', fg='black', command=lambda: rent(current_car, current_person))
+    rent_button.place(x=600, y=450, width=200)
+    rent_label = Label(master=kiraye_window, text='', font=('Helvetica', 20))
+    rent_label.place(x=800, y=450)
+
+    save_button = Button(master=kiraye_window, text='Save', font=20, bg='pink', fg='black', command=save)
+    save_button.place(x=600, y=500, width=200)
+
     kiraye_window.mainloop()
+
+
+def hesabat():
+    global renter_list
+    global cars
+
+    def show_info(event):
+        global history
+        selection = hesabat_masin.curselection()[0]-1
+        if selection:
+            if selection < len(renter_list):
+                available_entry.delete(0, END)
+                available_entry.insert(0, 'Movcud deyil!')
+                renter_entry.delete(0, END)
+                renter_entry.insert(0, cars[selection].renter)
+            else:
+                available_entry.delete(0, END)
+                available_entry.insert(0, 'Movcuddur')
+                renter_entry.delete(0, END)
+                renter_entry.insert(0, '-')
+
+    hesabat_window = Toplevel(root)
+    hesabat_window.title('Hesabat penceresi')
+    hesabat_window.geometry('1000x600')
+    hesabat_window.iconbitmap('images/report_icon.ico')
+    hesabat_window.maxsize(width=1000, height=600)
+    hesabat_window.minsize(width=1000, height=600)
+
+    image1 = Image.open('images/hesabat_bg.png')
+    tk_image1 = ImageTk.PhotoImage(image1)
+    window_label = Label(master=hesabat_window, image=tk_image1)
+    window_label.place(x=0, y=0, width=1000, height=600)
+
+    try:
+        file = open('RentFile.txt', 'rb')
+        try:
+            renter_list = pickle.load(file)
+        except Exception as e:
+            print(e)
+        finally:
+            file.close()
+    except Exception as ex:
+        print(ex)
+
+    hesabat_masin_list_var = Variable(value=cars)
+    hesabat_masin = Listbox(master=hesabat_window, listvariable=hesabat_masin_list_var, selectmode=SINGLE, fg='black',
+                          bg='cyan',
+                          font=20, selectbackground='blue', selectforeground='white')
+    hesabat_masin.place(x=50, y=50, width=250, height=400)
+    hesabat_masin.bind("<<ListboxSelect>>", show_info)
+
+    available_label = Label(master=hesabat_window, text='Movcud:', font=('Helvetica', 20, 'bold'), bg='cyan', fg='black')
+    available_label.place(x=350, y=100)
+    available_entry = Entry(master=hesabat_window, width=50, font=20)
+    available_entry.place(x=500, y=100)
+
+    renter_label = Label(master=hesabat_window, text='Renter:', font=('Helvetica', 20, 'bold'), bg='cyan', fg='black')
+    renter_label.place(x=350, y=200)
+    renter_entry = Entry(master=hesabat_window, width=50, font=20)
+    renter_entry.place(x=500, y=200)
+
+    hesabat_window.mainloop()
 
 
 def resize_image(image_path, width, height):
@@ -561,13 +615,13 @@ root.iconbitmap('images/masin_icon.ico')
 root.maxsize(width=1000, height=600)
 root.minsize(width=1000, height=600)
 
-emrler_photo = resize_image('images/pencere1_banner.png', 1000, 200)
+emrler_photo = resize_image('images/pencere1_banner.png', 600, 200)
 emrler_photo1 = Image.open('images/pencere1_banner.png')
 tk_emrler_photo = ImageTk.PhotoImage(emrler_photo1)
 emrler = Label(master=root, image=tk_emrler_photo,
                text='Movcud xidmetler:\nMüştəri idarəetmə pəncərəsi\nMaşın idarəetmə pəncərəsi\nKirayə vermə və qaytarma',
                compound='center', font=('Helvetica', 30, 'bold'), fg='orange')
-emrler.place(x=0, y=0, width=1000, height=200)
+emrler.place(x=0, y=0, width=600, height=200)
 
 masinlar_photo = resize_image('images/car1.png', 350, 400)
 masinlar_button = Button(master=root, image=masinlar_photo, command=masinlar)
@@ -576,7 +630,7 @@ masinlar_label = Label(master=root, text='Maşınlar', font=('Helvetica', 20, 'b
 masinlar_label.place(x=125, y=230)
 
 musteri_photo = resize_image('images/musteri_pencere.png', 350, 400)
-musteri_button = Button(master=root, image=musteri_photo, command=musteriler)
+musteri_button = Button(master=root, image=musteri_photo, command=musteriler_func)
 musteri_button.place(x=350, y=200)
 musteri_label = Label(master=root, text='Müştərilər', font=('Helvetica', 20, 'bold'), fg='black', bg='white')
 musteri_label.place(x=450, y=230)
@@ -587,5 +641,48 @@ kiraye_button.place(x=700, y=200)
 kiraye_label = Label(master=root, text='Kiraye\nalib-verme', font=('Helvetica', 20, 'bold'), fg='black', bg='#008B8B')
 kiraye_label.place(x=705, y=205)
 
+hesabat_photo = resize_image('images/hesabat.png', 400, 200)
+hesabat_button = Button(master=root, image=hesabat_photo, command=hesabat)
+hesabat_button.place(x=600, y=0, width=400, height=200)
+hesabat_label = Label(master=root, text='Hesabat', font=('Helvetica', 20, 'bold'), fg='black', bg='white')
+hesabat_label.place(x=880, y=5)
+
+cars = []
+try:
+    file = open('CarFile.txt', 'rb')
+    try:
+        cars = pickle.load(file)
+    except Exception as e:
+        print(e)
+    finally:
+        file.close()
+except Exception as ex:
+    print(ex)
+
+musteriler = []
+try:
+    file = open('MusteriFile.txt', 'rb')
+    try:
+        musteriler = pickle.load(file)
+    except Exception as e:
+        print(e)
+    finally:
+        file.close()
+except Exception as ex:
+    print(ex)
+
+renter_list = []
+try:
+    file = open('RentFile.txt', 'rb')
+    try:
+        renter_list = pickle.load(file)
+    except Exception as e:
+        print(e)
+    finally:
+        file.close()
+except Exception as ex:
+    print(ex)
+
+history = -1
 
 root.mainloop()
