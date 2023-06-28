@@ -323,31 +323,32 @@ def musteriler_func():
 
 
 def kiraye():
-    global renter_list
     global musteriler
     global cars
+    global renter_list
     current_person = None
     current_car = None
 
     def rent(car, person):
-        global history
-        if not car.rented:
-            car.rented = True
-            car.renter = person.ad
-            renter_list.append(car.renter)
-            rent_label['text'] = 'Successfully\nrented'
-            rent_label.config(fg='green')
-            history += 1
+        selection2 = muddet_secim.curselection()
+        if selection2:
+            if not car.rented:
+                car.rented = True
+                car.renter = person.ad
+                rent_label['text'] = 'Ugurla\nkiralandi'
+                rent_label.config(fg='green')
+            else:
+                rent_label['text'] = 'Masin\nartiq\nkiralanib'
+                rent_label.config(fg='red')
         else:
-            rent_label['text'] = 'Car has\nalready\nrented'
+            rent_label['text'] = 'Muddet secin'
             rent_label.config(fg='red')
 
     def save():
-        global renter_list
         try:
             file3 = open('RentFile.txt', 'wb')
             try:
-                renter_list = pickle.dump(renter_list, file3)
+                pickle.dump(renter_list, file3)
             except Exception as e:
                 print(e)
             finally:
@@ -512,19 +513,17 @@ def hesabat():
     global cars
 
     def show_info(event):
-        global history
-        selection = hesabat_masin.curselection()[0]-1
-        if selection:
-            if selection < len(renter_list):
-                available_entry.delete(0, END)
-                available_entry.insert(0, 'Movcud deyil!')
-                renter_entry.delete(0, END)
-                renter_entry.insert(0, cars[selection].renter)
-            else:
-                available_entry.delete(0, END)
-                available_entry.insert(0, 'Movcuddur')
-                renter_entry.delete(0, END)
-                renter_entry.insert(0, '-')
+        selection = hesabat_masin.curselection()[0]
+        if cars[selection].rented:
+            available_entry.delete(0, END)
+            available_entry.insert(0, 'Movcud deyil!')
+            renter_entry.delete(0, END)
+            renter_entry.insert(0, cars[selection].renter)
+        else:
+            available_entry.delete(0, END)
+            available_entry.insert(0, 'Movcuddur')
+            renter_entry.delete(0, END)
+            renter_entry.insert(0, '-')
 
     hesabat_window = Toplevel(root)
     hesabat_window.title('Hesabat penceresi')
@@ -682,7 +681,5 @@ try:
         file.close()
 except Exception as ex:
     print(ex)
-
-history = -1
 
 root.mainloop()
