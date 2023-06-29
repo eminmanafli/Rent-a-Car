@@ -13,6 +13,7 @@ class Car:
         self.qiymet = qiymet
         self.rented = False
         self.renter = None
+        self.muddet = None
 
     def __str__(self):
         return f'{self.marka} {self.model}'
@@ -88,13 +89,13 @@ def masinlar():
 
     def save1():
         try:
-            file1 = open('CarFile.txt', 'wb')
+            file = open('CarFile.txt', 'wb')
             try:
-                pickle.dump(cars, file1)
+                pickle.dump(cars, file)
             except Exception as e:
                 print(e)
             finally:
-                file1.close()
+                file.close()
         except Exception as ex:
             print(ex)
 
@@ -232,13 +233,13 @@ def musteriler_func():
 
     def save1():
         try:
-            file2 = open('MusteriFile.txt', 'wb')
+            file = open('MusteriFile.txt', 'wb')
             try:
-                pickle.dump(musteriler, file2)
+                pickle.dump(musteriler, file)
             except Exception as e:
                 print(e)
             finally:
-                file2.close()
+                file.close()
         except Exception as ex:
             print(ex)
 
@@ -325,18 +326,20 @@ def musteriler_func():
 def kiraye():
     global musteriler
     global cars
-    global renter_list
+    global rent_list
     current_person = None
     current_car = None
 
     def rent(car, person):
         selection2 = muddet_secim.curselection()
         if selection2:
-            if not car.rented:
+            if car not in rent_list:
                 car.rented = True
                 car.renter = person.ad
+                car.muddet = muddet_list[muddet_secim.curselection()[0]]
                 rent_label['text'] = 'Ugurla\nkiralandi'
                 rent_label.config(fg='green')
+                rent_list.append(car)
             else:
                 rent_label['text'] = 'Masin\nartiq\nkiralanib'
                 rent_label.config(fg='red')
@@ -346,13 +349,13 @@ def kiraye():
 
     def save():
         try:
-            file3 = open('RentFile.txt', 'wb')
+            file = open('RentFile.txt', 'wb')
             try:
-                pickle.dump(renter_list, file3)
+                pickle.dump(rent_list, file)
             except Exception as e:
                 print(e)
             finally:
-                file3.close()
+                file.close()
         except Exception as ex:
             print(ex)
 
@@ -371,7 +374,7 @@ def kiraye():
             elif muddet == '2 hefte':
                 qiymet_label4['text'] = str(int(price) * 14)
             elif muddet == '1 ay':
-                qiymet_label4['text'] =str(int(price) * 30)
+                qiymet_label4['text'] = str(int(price) * 30)
 
     def musteri_show_info(event):
         nonlocal current_person
@@ -509,7 +512,7 @@ def kiraye():
 
 
 def hesabat():
-    global renter_list
+    global rent_list
     global cars
 
     def show_info(event):
@@ -519,11 +522,15 @@ def hesabat():
             available_entry.insert(0, 'Movcud deyil!')
             renter_entry.delete(0, END)
             renter_entry.insert(0, cars[selection].renter)
+            time_entry.delete(0, END)
+            time_entry.insert(0, cars[selection].muddet)
         else:
             available_entry.delete(0, END)
             available_entry.insert(0, 'Movcuddur')
             renter_entry.delete(0, END)
             renter_entry.insert(0, '-')
+            time_entry.delete(0, END)
+            time_entry.insert(0, '-')
 
     hesabat_window = Toplevel(root)
     hesabat_window.title('Hesabat penceresi')
@@ -536,17 +543,6 @@ def hesabat():
     tk_image1 = ImageTk.PhotoImage(image1)
     window_label = Label(master=hesabat_window, image=tk_image1)
     window_label.place(x=0, y=0, width=1000, height=600)
-
-    try:
-        file = open('RentFile.txt', 'rb')
-        try:
-            renter_list = pickle.load(file)
-        except Exception as e:
-            print(e)
-        finally:
-            file.close()
-    except Exception as ex:
-        print(ex)
 
     hesabat_masin_list_var = Variable(value=cars)
     hesabat_masin = Listbox(master=hesabat_window, listvariable=hesabat_masin_list_var, selectmode=SINGLE, fg='black',
@@ -564,6 +560,11 @@ def hesabat():
     renter_label.place(x=350, y=200)
     renter_entry = Entry(master=hesabat_window, width=50, font=20)
     renter_entry.place(x=500, y=200)
+
+    time_label = Label(master=hesabat_window, text='Muddet:', font=('Helvetica', 20, 'bold'), bg='cyan', fg='black')
+    time_label.place(x=350, y=300)
+    time_entry = Entry(master=hesabat_window, width=50, font=20)
+    time_entry.place(x=500, y=300)
 
     hesabat_window.mainloop()
 
@@ -607,6 +608,42 @@ def find_musteriler(musteri, entry, selection):
             return musteri
 
 
+cars = []
+try:
+    file = open('CarFile.txt', 'rb')
+    try:
+        cars = pickle.load(file)
+    except Exception as e:
+        print(e)
+    finally:
+        file.close()
+except Exception as ex:
+    print(ex)
+
+musteriler = []
+try:
+    file = open('MusteriFile.txt', 'rb')
+    try:
+        musteriler = pickle.load(file)
+    except Exception as e:
+        print(e)
+    finally:
+        file.close()
+except Exception as ex:
+    print(ex)
+
+rent_list = []
+try:
+    file = open('RentFile.txt', 'rb')
+    try:
+        rent_list = pickle.load(file)
+    except Exception as e:
+        print(e)
+    finally:
+        file.close()
+except Exception as ex:
+    print(ex)
+
 root = Tk()
 root.title("Rent a Car")
 root.geometry("1000x600")
@@ -618,8 +655,8 @@ emrler_photo = resize_image('images/pencere1_banner.png', 600, 200)
 emrler_photo1 = Image.open('images/pencere1_banner.png')
 tk_emrler_photo = ImageTk.PhotoImage(emrler_photo1)
 emrler = Label(master=root, image=tk_emrler_photo,
-               text='Movcud xidmetler:\nMüştəri idarəetmə pəncərəsi\nMaşın idarəetmə pəncərəsi\nKirayə vermə və qaytarma',
-               compound='center', font=('Helvetica', 30, 'bold'), fg='orange')
+               text='RENT A CAR',
+               compound='center', font=('Courier New', 50, 'bold'), fg='red')
 emrler.place(x=0, y=0, width=600, height=200)
 
 masinlar_photo = resize_image('images/car1.png', 350, 400)
@@ -645,41 +682,5 @@ hesabat_button = Button(master=root, image=hesabat_photo, command=hesabat)
 hesabat_button.place(x=600, y=0, width=400, height=200)
 hesabat_label = Label(master=root, text='Hesabat', font=('Helvetica', 20, 'bold'), fg='black', bg='white')
 hesabat_label.place(x=880, y=5)
-
-cars = []
-try:
-    file = open('CarFile.txt', 'rb')
-    try:
-        cars = pickle.load(file)
-    except Exception as e:
-        print(e)
-    finally:
-        file.close()
-except Exception as ex:
-    print(ex)
-
-musteriler = []
-try:
-    file = open('MusteriFile.txt', 'rb')
-    try:
-        musteriler = pickle.load(file)
-    except Exception as e:
-        print(e)
-    finally:
-        file.close()
-except Exception as ex:
-    print(ex)
-
-renter_list = []
-try:
-    file = open('RentFile.txt', 'rb')
-    try:
-        renter_list = pickle.load(file)
-    except Exception as e:
-        print(e)
-    finally:
-        file.close()
-except Exception as ex:
-    print(ex)
 
 root.mainloop()
