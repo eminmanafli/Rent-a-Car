@@ -140,7 +140,7 @@ def masinlar():
     reng_entry.place(x=360, y=365)
 
     qiymet_label = Label(master=masin, text='Qiymet:', font=('Helvetica', 20), fg='black')
-    qiymet_label.place(x=270, y=405)
+    qiymet_label.place(x=260, y=405)
     qiymet_entry = Entry(master=masin, width=15, font=20)
     qiymet_entry.place(x=360, y=415)
 
