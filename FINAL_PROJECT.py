@@ -16,7 +16,7 @@ class Car:
         self.muddet = None
 
     def __str__(self):
-        return f'{self.marka} {self.model}'
+        return f'{self.marka} {self.model} {self.rented}'
 
 
 class Musteri:
@@ -358,6 +358,16 @@ def kiraye():
                 file.close()
         except Exception as ex:
             print(ex)
+        try:
+            file = open('CarFile.txt', 'wb')
+            try:
+                pickle.dump(cars, file)
+            except Exception as e:
+                print(e)
+            finally:
+                file.close()
+        except Exception as ex:
+            print(ex)
 
     def qiymet(event):
         nonlocal current_car
@@ -637,7 +647,6 @@ try:
     file = open('RentFile.txt', 'rb')
     try:
         rent_list = pickle.load(file)
-        print(rent_list)
     except Exception as e:
         print(e)
     finally:
