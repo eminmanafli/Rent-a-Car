@@ -16,7 +16,7 @@ class Car:
         self.muddet = None
 
     def __str__(self):
-        return f'{self.marka} {self.model} {self.rented}'
+        return f'{self.marka} {self.model}'
 
 
 class Musteri:
@@ -333,7 +333,7 @@ def kiraye():
     def rent(car, person):
         selection2 = muddet_secim.curselection()
         if selection2:
-            if car not in rent_list:
+            if not car.rented:
                 car.rented = True
                 car.renter = person.ad
                 car.muddet = muddet_list[muddet_secim.curselection()[0]]
