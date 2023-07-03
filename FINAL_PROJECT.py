@@ -637,12 +637,14 @@ try:
     file = open('RentFile.txt', 'rb')
     try:
         rent_list = pickle.load(file)
+        print(rent_list)
     except Exception as e:
         print(e)
     finally:
         file.close()
 except Exception as ex:
     print(ex)
+
 
 root = Tk()
 root.title("Rent a Car")
